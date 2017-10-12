@@ -40,7 +40,7 @@ def gainweibo(id,header):
             break
         print type(selector)
         for n in range(10):
-            dict={'ifreweet':0,'reweetFrom':"",'reweetContent':"",'reweetContent':"",'re@sb':"",'topic':"",'content':"",'_@sb':"","attiNum":"","repostNum":"","commentNum";"",'time':""}
+            dict={'ifreweet':0,'reweetFrom':"",'reweetContent':"",'reweetContent':"",'re@sb':"",'topic':"",'content':"",'_@sb':"",'attiNum':"",'repostNum':"",'commentNum':"",'time':""}
             mxpath="//div[contains(@id,'M_')]"
             try:
                 selector=selector.xpath(mxpath)[n]
@@ -66,15 +66,24 @@ def gainweibo(id,header):
                 dict['content'] = "".join(selector.xpath(con + '/text() | ' + con + '/a[contains(@href,"/n/")]/text()|' + con + '/a[contains(text(),"#")]/text()'))
                 dict['_@sb'] = "".join(selector.xpath(con + '/a[contains(@href,"/n/")]/text()'))
                 dict['topic'] += "".join(selector.xpath(con + '/a[contains(text(),"#")]/text()'))
-                dict['attiNum']= selector.xpath('div/'s)
-                dict['repostNum']= selector.xpath(div)
-                dict['commentNum']= selector.xpath(con + '/a[contains(text(),"#")]/text()'))
+                try:
+                    dict['attiNum']= selector.xpath('div/a[contains(text(),"%s")]/text()'%u'赞')[0].split("[")[1].split(']')[1]
+                except IndexError:
+                    dict['attiNum']= selector.xpath('div/span[contains(text(),"%s")]/text()'%u'赞')[0].split("[")[1].split(']')[1]
+                dict['repostNum']= selector.xpath('div/a[contains(text(),"%s")]/text()'%u'转发')[0].split("[")[1].split(']')[1]
+                dict['commentNum']= selector.xpath('div/a[contains(text(),"%s")]/text()'%u'评论')[0].split("[")[1].split(']')[1]
                 dict['time'] = selector.xpath('div/span[@class="ct"]')[0].text
             else:
                 con = 'div[1]/span[@class="ctt"]'
                 dict['content'] = "".join(selector.xpath(con + '/text()|' + con + '/a[contains(@href,"/n/")]/text()|' + con + '/a[contains(text(),"#")]/text()'))
                 dict['_@sb'] = "".join(selector.xpath(con + '/a[contains(@href,"/n/")]/text()'))
                 dict['topic'] = "".join(selector.xpath(con + '/a[contains(text(),"#")]/text()'))
+                try:
+                    dict['attiNum'] = selector.xpath('div/a[contains(text(),"%s")]/text()' % u'赞')[0].split("[")[1].split(']')[0]
+                except IndexError:
+                    dict['attiNum'] = selector.xpath('div/span[contains(text(),"%s")]/text()' % u'赞')[0].split("[")[1].split(']')[0]
+                dict['repostNum'] = selector.xpath('div/a[contains(text(),"%s")]/text()' % u'转发')[0].split('[')[1].split(']')[0]
+                dict['commentNum'] = selector.xpath('div/a[contains(text(),"%s")]/text()' % u'评论')[0].split("[")[1].split(']')[0]
                 dict['time'] = selector.xpath('div/span[@class="ct"]')[0].text
             print dict
             with open(id + "weibo.json", "a") as f:
