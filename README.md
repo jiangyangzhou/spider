@@ -1,4 +1,4 @@
-# spider
+# Weibo spider
 ## weibospider
 - It is a simple weibo spider for mobile weibo website: weibo.cn
 - It was written in python2 and it uses Request lib.
